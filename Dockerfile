@@ -1,8 +1,4 @@
-FROM node:slim as builder
-
-LABEL org.opencontainers.image.source https://github.com/ender-null/polaris-client-whatsapp
-
-RUN npm install yarn@latest -g --force
+FROM node:current-slim as builder
 
 RUN mkdir -p /usr/src/app
 
@@ -15,8 +11,16 @@ RUN yarn install
 
 COPY . .
 
-ENV TZ=Europe/Madrid
+RUN yarn run build
 
-EXPOSE 3000
+FROM node:current-slim as release
+
+LABEL org.opencontainers.image.source https://github.com/ender-null/polaris-client-whatsapp
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/build ./build
+COPY --from=builder /usr/src/app/package.json ./
 
 CMD ["yarn", "start"]
