@@ -13,9 +13,9 @@ export class Bot {
   }
 
   async init() {
-    const waba = await this.getWhatsAppBusinessAccount();
+    /*const whatsappBusinessAccount = await this.getWhatsAppBusinessAccount();
     const phoneNumbers: any = await axios.get(
-      `https://graph.facebook.com/${process.env.API_VERSION}/${waba.whatsapp_business_account.id}/phone_numbers`,
+      `https://graph.facebook.com/${process.env.API_VERSION}/${whatsappBusinessAccount.whatsapp_business_account.id}/phone_numbers`,
       {
         headers: {
           Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
@@ -28,6 +28,13 @@ export class Bot {
       firstName: phoneNumbers.data[0].verified_name,
       lastName: null,
       username: phoneNumbers.data[0].id,
+      isBot: true,
+    };*/
+    this.user = {
+      id: process.env.PHONE_NUMBER_ID,
+      firstName: 'undefined',
+      lastName: null,
+      username: process.env.PHONE_NUMBER_ID,
       isBot: true,
     };
     const config: Config = JSON.parse(process.env.CONFIG);
