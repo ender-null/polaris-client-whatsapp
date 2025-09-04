@@ -14,20 +14,11 @@ export class Bot {
 
   async init() {
     const whatsappBusinessAccount = await this.getWhatsAppBusinessAccount();
-    const phoneNumbers: any = await axios.get(
-      `https://graph.facebook.com/${process.env.API_VERSION}/${whatsappBusinessAccount.whatsapp_business_account.id}/phone_numbers`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
     this.user = {
-      id: phoneNumbers.data[0].id,
-      firstName: phoneNumbers.data[0].verified_name,
+      id: whatsappBusinessAccount.display_phone_number,
+      firstName: whatsappBusinessAccount.verified_name,
       lastName: null,
-      username: phoneNumbers.data[0].id,
+      username: whatsappBusinessAccount.display_phone_number,
       isBot: true,
     };
     const config: Config = JSON.parse(process.env.CONFIG);
@@ -101,14 +92,11 @@ export class Bot {
   }
 
   async getWhatsAppBusinessAccount(): Promise<any> {
-    return axios.get(
-      `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.PHONE_NUMBER_ID}?fields=whatsapp_business_account`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
+    return axios.get(`https://graph.facebook.com/${process.env.API_VERSION}/${process.env.PHONE_NUMBER_ID}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        'Content-Type': 'application/json',
       },
-    );
+    });
   }
 }
