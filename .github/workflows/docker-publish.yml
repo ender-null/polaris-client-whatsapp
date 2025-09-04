@@ -154,7 +154,7 @@ jobs:
           ACCESS_TOKEN: op://end.works/Wasat/credential
           PHONE_NUMBER_ID: op://end.works/Wasat/phone number id
           VERIFY_TOKEN: op://end.works/Wasat/verify token
-
+          API_VERSION: op://end.works/Wasat/api version
       - name: Run container on host
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -166,7 +166,7 @@ jobs:
             docker pull ghcr.io/${{ github.repository }}:${{ env.TAG }}
             docker stop ${{ env.CONTAINER_NAME }}
             docker rm ${{ env.CONTAINER_NAME }}
-            docker run -p 8051:3000 -e SERVER=${{ env.SERVER }} -e CONFIG='${{ env.CONFIG }}' -e ACCESS_TOKEN=${{ env.ACCESS_TOKEN }} -e VERIFY_TOKEN=${{ env.VERIFY_TOKEN }} -e PHONE_NUMBER_ID=${{ env.PHONE_NUMBER_ID }} -v $PWD/logs:/usr/src/app/logs -e TZ=Europe/Madrid -ti -d --restart unless-stopped --name ${{ env.CONTAINER_NAME }} ghcr.io/${{ github.repository }}:${{ env.TAG }}
+            docker run -p 8051:3000 -e SERVER=${{ env.SERVER }} -e CONFIG='${{ env.CONFIG }}' -e API_VERSION=${{ env.API_VERSION }} -e ACCESS_TOKEN=${{ env.ACCESS_TOKEN }} -e VERIFY_TOKEN=${{ env.VERIFY_TOKEN }} -e PHONE_NUMBER_ID=${{ env.PHONE_NUMBER_ID }} -v $PWD/logs:/usr/src/app/logs -e TZ=Europe/Madrid -ti -d --restart unless-stopped --name ${{ env.CONTAINER_NAME }} ghcr.io/${{ github.repository }}:${{ env.TAG }}
 
       - name: Generate summary
         id: generate-summary
