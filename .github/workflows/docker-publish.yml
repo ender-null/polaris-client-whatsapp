@@ -151,10 +151,10 @@ jobs:
           FINGERPRINT: op://end.works/SSH Key/fingerprint
           SERVER: op://end.works/Peto-tan Config/server
           CONFIG: op://end.works/Peto-tan Config/config whatsapp
-          ACCESS_TOKEN: op://end.works/Wasat/credential
-          PHONE_NUMBER_ID: op://end.works/Wasat/phone number id
-          VERIFY_TOKEN: op://end.works/Wasat/verify token
-          API_VERSION: op://end.works/Wasat/api version
+          ACCESS_TOKEN: op://end.works/Peto-tan WhatsApp/credential
+          PHONE_NUMBER_ID: op://end.works/Peto-tan WhatsApp/phone number id
+          VERIFY_TOKEN: op://end.works/Peto-tan WhatsApp/verify token
+          API_VERSION: op://end.works/Peto-tan WhatsApp/api version
       - name: Run container on host
         uses: appleboy/ssh-action@v1.0.3
         with:
