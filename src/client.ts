@@ -134,3 +134,5 @@ ws.on('message', (data: string) => {
     catchException(error);
   }
 });
+
+app.listen(3000, () => logger.info('Webhook listening on port 3000'));
