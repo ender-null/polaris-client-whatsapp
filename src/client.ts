@@ -72,10 +72,7 @@ app.post('/webhook', (req, res) => {
   const messages = changes?.messages;
 
   if (messages && messages[0]) {
-    const from = messages[0].from; // user's WhatsApp number
-    const msgBody = messages[0].text.body;
-
-    logger.info(`Received message: ${msgBody} from ${from}`);
+    logger.info(`Received message: ${JSON.stringify(messages[0], null, 4)}`);
     messages.forEach((message) => {
       const msg = bot.convertMessage(message);
       const data: WSMessage = {
