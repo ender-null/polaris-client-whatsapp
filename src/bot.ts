@@ -105,6 +105,7 @@ export class Bot {
       text = htmlToWhatsAppMarkdown(text);
     }
     text = text.trim();
+
     let payload = null;
     if (msg.type === 'text') {
       payload = {
@@ -152,6 +153,10 @@ export class Bot {
           voice: msg.type === 'voice',
         },
       };
+    }
+
+    if (!payload) {
+      return null;
     }
 
     return axios
