@@ -60,6 +60,24 @@ export class Bot {
     if (msg.type === 'text') {
       content = msg.text.body;
       type = 'text';
+    } else if (msg.type === 'image') {
+      content = msg.sticker.id;
+      type = 'photo';
+    } else if (msg.type === 'video') {
+      content = msg.video.id;
+      type = 'video';
+    } else if (msg.type === 'audio') {
+      content = msg.audio.id;
+      type = msg.audio.voice ? 'voice' : 'audio';
+    } else if (msg.type === 'document') {
+      content = msg.document.id;
+      type = 'document';
+    } else if (msg.type === 'location') {
+      content = msg.location;
+      type = 'location';
+    } else if (msg.type === 'sticker') {
+      content = msg.image.id;
+      type = 'sticker';
     } else {
       type = 'unsupported';
     }

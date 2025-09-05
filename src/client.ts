@@ -72,7 +72,7 @@ app.post('/webhook', (req, res) => {
   const messages = changes?.messages;
 
   if (messages && messages[0]) {
-    logger.info(`Received message: ${JSON.stringify(messages[0], null, 4)}`);
+    logger.info(`Received message: ${JSON.stringify(entry, null, 4)}`);
     messages.forEach((message) => {
       const msg = bot.convertMessage(message);
       const data: WSMessage = {
@@ -122,7 +122,7 @@ ws.on('message', (data: string) => {
   try {
     const msg = JSON.parse(data);
     if (msg.type !== 'pong') {
-      logger.info(JSON.stringify(msg, null, 4));
+      //logger.info(JSON.stringify(msg, null, 4));
     }
     if (msg.type === 'message') {
       bot.sendMessage(msg.message);
