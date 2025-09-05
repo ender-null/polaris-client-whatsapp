@@ -67,7 +67,6 @@ app.get('/webhook', (req, res) => {
 });
 
 app.post('/webhook', (req, res) => {
-  logger.info(`Received message: ${JSON.stringify(req.body, null, 4)}`);
   const entry = req.body.entry?.[0];
   const changes = entry?.changes?.[0]?.value;
   const messages = changes?.messages;

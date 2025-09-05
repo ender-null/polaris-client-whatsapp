@@ -14,12 +14,12 @@ export class Bot {
 
   async init() {
     const whatsappBusinessAccount = await this.getWhatsAppBusinessAccount();
-    logger.info(Object.keys(whatsappBusinessAccount));
+    logger.info(Object.keys(whatsappBusinessAccount.data));
     this.user = {
-      id: whatsappBusinessAccount.display_phone_number,
-      firstName: whatsappBusinessAccount.verified_name,
+      id: whatsappBusinessAccount.data.display_phone_number,
+      firstName: whatsappBusinessAccount.data.verified_name,
       lastName: null,
-      username: whatsappBusinessAccount.display_phone_number,
+      username: whatsappBusinessAccount.data.display_phone_number,
       isBot: true,
     };
     logger.info(JSON.stringify(this.user, null, 4));
