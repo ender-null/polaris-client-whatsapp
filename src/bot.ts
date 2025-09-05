@@ -14,7 +14,7 @@ export class Bot {
 
   async init() {
     const whatsappBusinessAccount = await this.getWhatsAppBusinessAccount();
-    logger.info(`whatsappBusinessAccount: ${JSON.stringify(whatsappBusinessAccount, null, 4)}`);
+    logger.info(whatsappBusinessAccount);
     this.user = {
       id: whatsappBusinessAccount.display_phone_number,
       firstName: whatsappBusinessAccount.verified_name,
