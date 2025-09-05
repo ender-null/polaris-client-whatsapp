@@ -114,7 +114,7 @@ export class Bot {
         type: 'text',
         text: { preview_url: msg.extra.preview, body: text },
       };
-    } else if (msg.type === 'image') {
+    } else if (msg.type === 'photo') {
       payload = {
         messaging_product: 'whatsapp',
         to: msg.conversation.id,
