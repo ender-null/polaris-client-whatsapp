@@ -14,12 +14,20 @@ export class Bot {
 
   async init() {
     const whatsappBusinessAccount = await this.getWhatsAppBusinessAccount();
-    logger.info(whatsappBusinessAccount);
+    logger.info(Object.keys(whatsappBusinessAccount));
     this.user = {
       id: whatsappBusinessAccount.display_phone_number,
       firstName: whatsappBusinessAccount.verified_name,
       lastName: null,
       username: whatsappBusinessAccount.display_phone_number,
+      isBot: true,
+    };
+    logger.info(JSON.stringify(this.user, null, 4));
+    this.user = {
+      id: process.env.PHONE_NUMBER_ID,
+      firstName: 'undefined',
+      lastName: null,
+      username: process.env.PHONE_NUMBER_ID,
       isBot: true,
     };
     const config: Config = JSON.parse(process.env.CONFIG);
