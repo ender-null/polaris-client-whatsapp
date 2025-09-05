@@ -67,14 +67,13 @@ app.get('/webhook', (req, res) => {
 });
 
 app.post('/webhook', (req, res) => {
+  logger.info(`Received message: ${JSON.stringify(req.body, null, 4)}`);
   const entry = req.body.entry?.[0];
   const changes = entry?.changes?.[0]?.value;
   const messages = changes?.messages;
-
   if (messages && messages[0]) {
-    logger.info(`Received message: ${JSON.stringify(entry, null, 4)}`);
-    messages.forEach((message) => {
-      const msg = bot.convertMessage(message);
+    entry?.changes.forEach((change) => {
+      const msg = bot.convertMessage(change.value);
       const data: WSMessage = {
         bot: bot.user.username,
         platform: 'whatsapp',

@@ -14,6 +14,7 @@ export class Bot {
 
   async init() {
     const whatsappBusinessAccount = await this.getWhatsAppBusinessAccount();
+    logger.info(`whatsappBusinessAccount: ${JSON.stringify(whatsappBusinessAccount, null, 4)}`);
     this.user = {
       id: whatsappBusinessAccount.display_phone_number,
       firstName: whatsappBusinessAccount.verified_name,
@@ -46,17 +47,23 @@ export class Bot {
     }
   }
 
-  convertMessage(msg) {
-    const id: string = msg.id;
+  convertMessage(change) {
     const extra: Extra = {
-      originalMessage: msg,
+      originalMessage: change,
     };
-
-    const conversation = new Conversation(msg.from, msg.from);
-    const sender = new User(msg.from, msg.from, null, msg.from, false);
+    const conversation = new Conversation(change.contacts[0].wa_id, change.contacts[0].profile.name);
+    const sender = new User(
+      change.contacts[0].wa_id,
+      change.contacts[0].profile.name,
+      null,
+      change.contacts[0].wa_id,
+      false,
+    );
     let content;
     let type;
 
+    const msg = change.messages[0];
+    const id: string = change.id;
     if (msg.type === 'text') {
       content = msg.text.body;
       type = 'text';
