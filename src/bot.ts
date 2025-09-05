@@ -1,8 +1,8 @@
-import WebSocket from 'ws';
-import { Conversation, Extra, Message, User, WSInit, WSPing } from './types';
-import { Config } from './config';
-import { logger } from './utils';
 import axios from 'axios';
+import WebSocket from 'ws';
+import { Config } from './config';
+import { Conversation, Extra, Message, User, WSInit, WSPing } from './types';
+import { htmlToWhatsAppMarkdown, logger } from './utils';
 
 export class Bot {
   user: User;
@@ -94,21 +94,73 @@ export class Bot {
   }
 
   async sendMessage(msg: Message): Promise<any> {
+    let caption = msg.extra?.caption;
+    if (msg.extra && msg.extra.format && msg.extra.format === 'HTML') {
+      caption = htmlToWhatsAppMarkdown(msg.extra?.caption);
+    }
+    caption = caption?.trim();
+
+    let text = msg.content;
+    if (msg.extra && msg.extra.format && msg.extra.format === 'HTML') {
+      text = htmlToWhatsAppMarkdown(text);
+    }
+    text = text.trim();
+    let payload = null;
+    if (msg.type === 'text') {
+      payload = {
+        messaging_product: 'whatsapp',
+        to: msg.conversation.id,
+        type: 'text',
+        text: { preview_url: msg.extra.preview, body: text },
+      };
+    } else if (msg.type === 'image') {
+      payload = {
+        messaging_product: 'whatsapp',
+        to: msg.conversation.id,
+        type: 'image',
+        image: {
+          link: msg.content,
+          caption,
+        },
+      };
+    } else if (msg.type === 'video') {
+      payload = {
+        messaging_product: 'whatsapp',
+        to: msg.conversation.id,
+        type: 'image',
+        image: {
+          link: msg.content,
+          caption,
+        },
+      };
+    } else if (msg.type === 'document') {
+      payload = {
+        messaging_product: 'whatsapp',
+        to: msg.conversation.id,
+        type: 'document',
+        document: {
+          link: msg.content,
+        },
+      };
+    } else if (msg.type === 'audio' || msg.type === 'voice') {
+      payload = {
+        messaging_product: 'whatsapp',
+        to: msg.conversation.id,
+        type: 'audio',
+        audio: {
+          link: msg.content,
+          voice: msg.type === 'voice',
+        },
+      };
+    }
+
     return axios
-      .post(
-        `https://graph.facebook.com/${process.env.API_VERSION}/${process.env.PHONE_NUMBER_ID}/messages`,
-        {
-          messaging_product: 'whatsapp',
-          to: msg.conversation.id,
-          text: { body: msg.content },
+      .post(`https://graph.facebook.com/${process.env.API_VERSION}/${process.env.PHONE_NUMBER_ID}/messages`, payload, {
+        headers: {
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+          'Content-Type': 'application/json',
         },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      )
+      })
       .then(() => {})
       .catch((err) => {
         logger.error('Error sending message:', err.response.data);
